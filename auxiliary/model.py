@@ -1,4 +1,9 @@
 from __future__ import print_function
+
+import sys
+sys.path.append("CODED3D/auxiliary")
+
+
 import torch
 import torch.nn as nn
 import torch.nn.parallel
@@ -117,12 +122,12 @@ class GetTemplate(object):
             os.system("chmod +x ./data/download_template.sh")
             os.system("./data/download_template.sh")
 
-        mesh = trimesh.load("./data/template/template.ply", process=False)
+        mesh = trimesh.load("./data/template.ply", process=False)
         self.mesh = mesh
         point_set = mesh.vertices
         point_set, _, _ = pointcloud_processor.center_bounding_box(point_set)
 
-        mesh_HR = trimesh.load("./data/template/template_dense.ply", process=False)
+        mesh_HR = trimesh.load("./CODED3D/data/template/template_dense.ply", process=False)
         self.mesh_HR = mesh_HR
         point_set_HR = mesh_HR.vertices
         point_set_HR, _, _ = pointcloud_processor.center_bounding_box(point_set_HR)
@@ -137,7 +142,7 @@ class GetTemplate(object):
         print(f"Using template to initialize template")
 
     def init_soup(self):
-        mesh = trimesh.load("./data/template/template.ply", process=False)
+        mesh = trimesh.load("./data/template.ply", process=False)
         self.mesh = mesh  # Load this anyway to keep access to edge information
         self.vertex = torch.FloatTensor(6890, 3).normal_().cuda()
         self.vertex_HR = self.vertex.clone()
@@ -146,7 +151,7 @@ class GetTemplate(object):
         print(f"Using Random soup to initialize template")
 
     def init_trainingdata(self, dataset_train=None):
-        mesh = trimesh.load("./data/template/template.ply", process=False)
+        mesh = trimesh.load("./data/template.ply", process=False)
         self.mesh = mesh  # Load this anyway to keep access to edge information
         index = np.random.randint(len(dataset_train))
         points = dataset_train.datas[index].squeeze().clone()

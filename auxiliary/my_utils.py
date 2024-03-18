@@ -4,7 +4,7 @@ import trimesh
 import os
 import torch
 from termcolor import colored
-import pymesh
+# import pymesh
 
 def grey_print(x):
     print(colored(x, "grey"))
